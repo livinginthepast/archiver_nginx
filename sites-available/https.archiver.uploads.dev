@@ -1,0 +1,38 @@
+server {
+  listen 8443 ssl;
+  server_name uploads.archiver.dev;
+  access_log /tmp/access_ssl.uploads.log main;
+  error_log /tmp/access_ssl_error.uploads.log debug;
+
+  include include/server.conf;
+  include include/ssl.conf;
+
+  location / {
+    add_header 'Access-Control-Allow-Origin' 'https://offline.litp.dev';
+    add_header 'Access-Control-Allow-Credentials' 'true';
+    add_header 'Access-Control-Max-Age' 180;
+
+    if ($request_method = 'OPTIONS') {
+      add_header 'Access-Control-Allow-Origin' 'https://offline.litp.dev';
+      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Max-Age' 180;
+
+      add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, OPTIONS';
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      add_header 'Content-Length' 0;
+      return 204;
+    }
+
+    root '/tmp/upload-handler';
+
+    include include/upload-handler.conf;
+    include include/proxy.conf;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+
+    client_body_temp_path /tmp/client_tmp;
+    client_max_body_size 200m;
+  }
+}

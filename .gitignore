@@ -1,0 +1,5 @@
+tmp
+certs/*.crt
+certs/*.key
+certs/.trusted
+sites-enabled/*

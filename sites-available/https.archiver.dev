@@ -1,0 +1,17 @@
+server {
+  listen 8443 ssl default_server;
+  server_name archiver.dev;
+  access_log /tmp/access_ssl.log main;
+  error_log /tmp/access_ssl_error.log debug;
+
+  include include/server.conf;
+  include include/ssl.conf;
+
+  location / {
+    include include/rails-server.conf;
+    include include/proxy.conf;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+  }
+}
