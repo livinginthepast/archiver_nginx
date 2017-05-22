@@ -3,8 +3,8 @@ server {
   server_name archiver.dev;
   include include/server.conf;
 
-  access_log /tmp/access.log main;
-  error_log /tmp/access_error.log debug;
+  access_log /dev/stdout json;
+  error_log /dev/stderr debug;
 
   location / {
     include include/rails-server.conf;

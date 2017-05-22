@@ -1,8 +1,8 @@
 server {
   listen 8443 ssl default_server;
   server_name archiver.dev;
-  access_log /tmp/access_ssl.log main;
-  error_log /tmp/access_ssl_error.log debug;
+  access_log /dev/stdout json;
+  error_log /dev/stderr debug;
 
   include include/server.conf;
   include include/ssl.conf;

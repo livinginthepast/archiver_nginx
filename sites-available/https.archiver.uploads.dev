@@ -1,20 +1,20 @@
 server {
   listen 8443 ssl;
   server_name uploads.archiver.dev;
-  access_log /tmp/access_ssl.uploads.log main;
-  error_log /tmp/access_ssl_error.uploads.log debug;
+  access_log /dev/stdout json;
+  error_log /dev/stderr debug;
 
   include include/server.conf;
   include include/ssl.conf;
 
   location / {
-    add_header 'Access-Control-Allow-Origin' 'https://offline.litp.dev';
-    add_header 'Access-Control-Allow-Credentials' 'true';
+    add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
     add_header 'Access-Control-Max-Age' 180;
 
     if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin' 'https://offline.litp.dev';
-      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+      add_header 'Access-Control-Allow-Credentials' 'true' always;
       add_header 'Access-Control-Max-Age' 180;
 
       add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
